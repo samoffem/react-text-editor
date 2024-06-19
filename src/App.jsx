@@ -70,7 +70,7 @@ function App() {
         }
       };
       reader.readAsDataURL(file);
-      setModal(false)
+      setPicModal(false)
     }
 
   };
