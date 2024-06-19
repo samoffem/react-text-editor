@@ -2,7 +2,7 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css';
 
 import './App.css'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRef } from 'react';
 
 import { MdAdd } from "react-icons/md";
@@ -18,6 +18,7 @@ function App() {
   const [showDropdown, setShow] = useState(false)
   const [showPicModal, setPicModal] = useState(false)
   const [showVideoModal, setVideoModal] = useState(false)
+  const [wordCount, setWordCount] = useState(0);
 
   const quillRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -109,6 +110,15 @@ function App() {
     return matches ? matches[1] : null;
   };
 
+  useEffect(() => {
+    const quill = quillRef.current.getEditor();
+    quill.on('text-change', () => {
+      const text = quill.getText().trim();
+      const words = text.split(/\s+/).filter(word => word.length > 0);
+      setWordCount(words.length);
+    });
+  }, []);
+
 
  
 
@@ -171,6 +181,7 @@ function App() {
               </div>
             </div>
           </div>
+          <div className='word-count'>{`${wordCount}/1000`}</div>
         </div>
         <div className='post-btn-wrap'>
           <button>Post</button>
@@ -231,7 +242,7 @@ function App() {
       </div>}
       
 
-
+       
     </div>
   )
 }

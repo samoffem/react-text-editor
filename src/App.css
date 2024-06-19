@@ -6,6 +6,11 @@
 .editor-wrap{
   min-height: 600px;
   border: 1px solid #e6e4e4;
+ 
+  
+}
+.editor{
+  min-height: 560px;
 }
 .top-box{
   height: 40px;
@@ -75,6 +80,14 @@
   font-size: 8px;
   color: #8f8f8f;
   margin-top: 3px;
+}
+
+.word-count{
+  height: 20px;
+  background-color: #fff;
+  text-align: right;
+  padding: 0 10px;
+  color: #000;
 }
 
 .post-btn-wrap{
