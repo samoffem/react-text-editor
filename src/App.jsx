@@ -181,7 +181,7 @@ function App() {
               </div>
             </div>
           </div>
-          <div className='word-count'>{`${wordCount}/1000`}</div>
+          <div className='word-count'>{`${wordCount}/1000 words`}</div>
         </div>
         <div className='post-btn-wrap'>
           <button>Post</button>
