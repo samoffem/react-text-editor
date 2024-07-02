@@ -11,6 +11,44 @@ import { FaVideo } from "react-icons/fa6";
 import { TbSocial } from "react-icons/tb";
 import { IoClose } from "react-icons/io5";
 
+import Quill from 'quill'
+
+
+const Size = Quill.import('formats/size');
+Size.whitelist = ['8px', '10px', '12px', '14px', '16px', '18px', '24px', '30px', '36px', '48px', '60px', '72px', '96px'];
+Quill.register(Size, true);
+
+const CustomToolbar = () => (
+  <div id="toolbar" className='custom-toolbar'>
+    <select className="ql-header" defaultValue="">
+      <option value="" disabled>Header</option> {/* Custom placeholder */}
+      <option value="1">Header 1</option>
+      <option value="2">Header 2</option>
+      <option value="3">Header 3</option>
+      <option value="4">Header 4</option>
+      <option value="5">Header 5</option>
+      <option value="6">Header 6</option>
+    </select>
+    {/* Add other toolbar options as needed */}
+   
+
+      <button className="ql-bold">Bold</button>
+      <button className="ql-italic">Italic</button>
+    
+    <button className="ql-underline">Underline</button>
+    <button className="ql-strike">Strike</button>
+    <button className="ql-blockquote">Blockquote</button>
+    <select className="ql-list" defaultValue="">
+      <option value="ordered">Ordered</option>
+      <option value="bullet">Bullet</option>
+    </select>
+    <button className="ql-link">Link</button>
+    <button className="ql-image">Image</button>
+    <button className="ql-video">Video</button>
+    <button className="ql-clean">Clear Formatting</button>
+  </div>
+);
+
 
 function App() {
   const [value, setValue] = useState()
@@ -18,6 +56,8 @@ function App() {
   const [showDropdown, setShow] = useState(false)
   const [showPicModal, setPicModal] = useState(false)
   const [showVideoModal, setVideoModal] = useState(false)
+  const [showSocialModal, setSocialModal] = useState(false)
+
   const [wordCount, setWordCount] = useState(0);
 
   const quillRef = useRef(null);
@@ -25,17 +65,25 @@ function App() {
 
   const modules = {
     toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline','strike', 'blockquote'],
+      [{ 'header': [1, 2, 3, 4, 5,] }, {'font': []}],
+      //[{ 'header': '1'}, {'header': '2'}, { 'font': [] }],
+      ['bold', 'italic', 'underline'],
       [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
       ['link', 'image', 'video'],
       ['clean']
     ],
   }
 
+
+// const modules = {
+//   toolbar: {
+//     container: '#toolbar',
+//   },
+// };
+
   const formats = [
-    'header',
-    'bold', 'italic', 'underline', 'strike', 'blockquote',
+    'header', 'size',
+    'bold', 'italic', 'underline',
     'list', 'bullet', 'indent',
     'link', 'image', 'video'
   ]
@@ -120,8 +168,6 @@ function App() {
   }, []);
 
 
- 
-
   return (
     <div className='container'>
       <div className='inner-wrap'>
@@ -140,20 +186,22 @@ function App() {
               style={{ display: 'none' }}
               onChange={handleImageUpload}
             />
+              {/* <CustomToolbar /> */}
               <ReactQuill 
              
-              value={value} 
-              onChange={handleChange}
-              className='editor-input'
-              ref={quillRef}
-              modules={modules}
-              formats={formats}
-              //modules={{ toolbar: false }}
+                value={value} 
+                onChange={handleChange}
+                className='editor-input'
+                placeholder='Add Content'
+                ref={quillRef}
+                modules={modules}
+                formats={formats}
+                //modules={{ toolbar: false }}
               />
               <div className='drop-down-wrap'>
-                <div className='add-icon' onClick={()=>setShow(!showDropdown)}>
+               {value && <div className='add-icon' onClick={()=>setShow(!showDropdown)}>
                   <MdAdd />
-                </div>
+                </div>}
                {showDropdown && <div className='dropdown'>
                   <p className='dropdown-heading'>EMBEDS</p>
                   <div className='dropdown-item' onClick={()=> {setPicModal(true); setShow(false) }}>
@@ -167,10 +215,10 @@ function App() {
                     <span><FaVideo /></span>
                     <div className='media-type'>
                       <p className='media-txt'>Video</p>
-                      <p className='format'>JW player, Youtube, Vimeo</p>
+                      <p className='format'>Embed a youtube video</p>
                     </div>
                   </div>
-                  <div className='dropdown-item'>
+                  <div className='dropdown-item' onClick={()=> {setSocialModal(true); setShow(false) }}>
                     <span><TbSocial /></span>
                     <div className='media-type'>
                       <p className='media-txt'>Social</p>
@@ -234,6 +282,51 @@ function App() {
 
           <div className='btns-wrap'>
             <button className='embed-btn' onClick={handleInsertYouTube}>Embed</button>
+            <button className='cancel-btn'>Cancel</button>
+          </div>
+
+        </div>
+
+      </div>}
+      
+      {showSocialModal && <div className='modal'>
+
+        <div className='modal-content'>
+          <div className='modal-title'>
+            <p className='embed-txt'>Embed</p>
+            <span className='close-modal' onClick={()=>setSocialModal(false)}><IoClose /></span>
+          </div>
+
+          <div className='video-details'>
+            <p className='provider-txt'>SOCIAL MEDIA PLATFORM</p>
+            <div className='video-chanel'>Facebook</div>
+
+            <div className='video-url'>
+              <p>URL</p>
+              <input />
+            </div>
+
+            <div className='video-url'>
+              <p>CODE</p>
+              <input />
+            </div>
+          </div>
+
+          <div className='toggle'>
+              <p>Disable Caption</p>
+
+              <div class="toggle-container">
+                <input type="checkbox" id="toggle" class="toggle-checkbox" />
+                <label for="toggle" class="toggle-label">
+                  <span class="toggle-switch"></span>
+                </label>
+              </div>
+          </div>
+
+          
+
+          <div className='btns-wrap'>
+            <button className='embed-btn' onClick={()=> setSocialModal(false)}>Embed</button>
             <button className='cancel-btn'>Cancel</button>
           </div>
 
